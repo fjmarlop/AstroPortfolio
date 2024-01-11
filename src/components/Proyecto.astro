@@ -1,0 +1,45 @@
+---
+interface Props {
+    title: string;
+    body: string;
+    imagenes: string[];
+    enlace: string;
+    github: string;
+}
+
+const { title, body, imagenes, enlace, github } = Astro.props;
+---
+
+<div class="bg-purple-100 border-4 border-purple-200 rounded-lg flex flex-col justify-between">
+    <h1 class="font-bold text-center py-3">{title}</h1>
+    <article class="mx-4 text-justify">{body}</article>
+    <div
+        class="flex flex-row flex-wrap items-center justify-center mt-3 mb-6 space-x-3"
+    >
+        {
+            imagenes.map((imagen) => (
+                <img src={imagen} alt={imagen} class="size-8 lg:size-10" />
+            ))
+        }
+        <a href={enlace} target="_blank" class="hover:bg-orange-400 rounded-full p-2">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="icon icon-tabler icon-tabler-link"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path
+                d="M9 15l6 -6"></path><path
+                d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"
+            ></path><path
+                d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"
+            ></path></svg
+        ></a>
+        <a href={github} target="_blank" class="hover:bg-orange-400 rounded-full p-2"><img src="/GitHub.png" alt="github" class="size-8 lg:size-10"></a>
+    </div>
+</div>

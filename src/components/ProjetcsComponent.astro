@@ -1,0 +1,37 @@
+---
+import Proyecto from "./Proyecto.astro";
+---
+
+<div>
+    <div class="mx-5 md:mx-10 xl:w-1/2 xl:mx-auto">
+        <h1
+            class="font-Gugi text-3xl font-bold my-10 md:text-5xl xl:text-7xl text-orange-400"
+        >
+            Proyectos />
+        </h1>
+    </div>
+    <div class="mx-5 my-10 lg:mx-auto xl:mx-auto text-black grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 lg:w-[75%] gap-10">
+        <Proyecto
+            title="Portafolio en Astro" 
+            body="Página web y Portfolio personal donde muestro información sobre mis trabajos, trayectoria profesional y formación académica."
+            imagenes={["/Astro.png", "/Tailwind CSS.png", "/TypeScript.png"]}
+            enlace="https://www.fjmarlop.es/"
+            github="https://github.com/Fjmarlop-dev"
+        />
+        <Proyecto
+            title="Portafolio "
+            body="Página web y Portfolio personal donde muestro información sobre mis trabajos, trayectoria profesional y formación académica. Versión anterior."
+            imagenes={["/HTML5.png", "/CSS3.png", "/JavaScript.png"]}
+            enlace="https://fjmarlop-dev.github.io"
+            github="https://github.com/fjmarlop/portfolio"
+        />
+        <Proyecto
+            title="Encuentas"
+            body="Aplicación móvil Android para realizar encuestas y recoger los datos. Las preguntas y sus posibles respuestas estan almacenadas en un JSON en línea. Las respuestas del usuario son recogidas en formato JSON y almacenadas en línea."
+            imagenes={["/Android Studio.png", "/Java.png"]}
+            enlace="https://fjmarlop-dev.github.io"
+            github="https://github.com/fjmarlop/Encuestas"
+        />
+        
+    </div>
+</div>

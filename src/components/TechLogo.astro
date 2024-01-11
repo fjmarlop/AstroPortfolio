@@ -1,0 +1,9 @@
+---
+interface Props {
+    icon: string;
+}
+
+const { icon } = Astro.props;
+---
+
+<img src={icon} alt={icon} class="size-14 xl:size-20"/>
