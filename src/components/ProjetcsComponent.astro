@@ -10,9 +10,11 @@ import Proyecto from "./Proyecto.astro";
             Proyectos />
         </h1>
     </div>
-    <div class="mx-5 my-10 lg:mx-auto xl:mx-auto text-black grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 lg:w-[75%] gap-10">
+    <div
+        class="mx-5 my-10 lg:mx-auto xl:mx-auto text-black grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 lg:w-[75%] gap-10"
+    >
         <Proyecto
-            title="Portafolio en Astro" 
+            title="Portafolio en Astro"
             body="Página web y Portfolio personal donde muestro información sobre mis trabajos, trayectoria profesional y formación académica."
             imagenes={["/Astro.png", "/Tailwind CSS.png", "/TypeScript.png"]}
             enlace="https://www.fjmarlop.es/"
@@ -32,6 +34,19 @@ import Proyecto from "./Proyecto.astro";
             enlace="https://www.fjmarlop.es/descargas/Encuestas.apk"
             github="https://github.com/fjmarlop/Encuestas"
         />
-        
+        <Proyecto
+            title="PizzetApp"
+            body="Aplicación móvil para realizar pedidos del restaurante ''La Pizzeta''. La aplicación contiene una lista de platos, un carrito de compras, un historial de pedidos y un perfil de usuario. Cuenta con 2 roles, cliente para realizar los pedidos y de gestión para gestionar la base de datos de productos y pedidos."
+            imagenes={["/Android Studio.png", "/Kotlin.png", "/Firebase.png"]}
+            enlace="https://www.fjmarlop.es/descargas/PizzetApp.apk"
+            github="https://github.com/fjmarlop/PizzettApp"
+        />
+        <Proyecto
+            title="PizzaApi"
+            body="API Rest para gestionar las peticiones http y base de datos de la aplicación la PizzettApp."
+            imagenes={["/Spring.png","/Java.png","/MySQL.png"]}
+            enlace="https://github.com/fjmarlop/PizzaApi"
+            github="https://github.com/fjmarlop/PizzettAppBackEnd"
+        />
     </div>
 </div>
