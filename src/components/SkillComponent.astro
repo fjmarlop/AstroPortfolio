@@ -5,15 +5,19 @@ import TechLogo from "./TechLogo.astro";
 <div class="flex flex-col bg-gradient-to-b from-gray-100 to-purple-300">
     <div class="mx-5 md:mx-10 xl:w-1/2 xl:mx-auto">
         <h1 class="font-Gugi text-3xl font-bold my-10 md:text-5xl xl:text-7xl">
-            Habilidades />
+            Tecnologías />
         </h1>
+        <!-- 
         <h2 class="font-bold text-2xl md:text-4xl ml-10">
             Habilidades técnicas.
         </h2>
+        -->
     </div>
-    <div
-        class="grid grid-cols-3 lg:grid-cols-4 gap-5 my-10 mx-auto md:w-[70%] lg:w-1/2 lg:gap-8"
-    >
+   <!--  <div
+        class="grid grid-row  gap-5 my-10 mx-auto md:w-[70%] lg:w-1/2 lg:gap-8" 
+    > -->
+    <div class="flex flex-row flex-wrap justify-center gap-5 my-10 mx-auto md:w-[70%] lg:w-1/2 lg:gap-8">
+    <!-- grid-cols-3 lg:grid-cols-4 -->
         <TechLogo icon="/Java.png" />
         <TechLogo icon="/Kotlin.png" />
         <TechLogo icon="/TypeScript.png" />
@@ -27,17 +31,19 @@ import TechLogo from "./TechLogo.astro";
         <TechLogo icon="/HTML5.png" />
         <TechLogo icon="/CSS3.png" />
     </div>
-    <div class="mx-5 my-10md:mx-10 xl:w-1/2 xl:mx-auto">
-        <h2 class="font-bold text-2xl md:text-4xl ml-10">
-            Habilidades sociales.
-        </h2>
-        <ul class="text-xl my-10 font-semibold md:text-3xl md:ml-20 ">
-            <li class="py-2">/> <span class="ml-5">Trabajo en equipo</span></li>
-            <li class="py-2">/> <span class="ml-5">Comunicación</span></li>
-            <li class="py-2">/> <span class="ml-5">Autoaprendizaje</span></li>
-            <li class="py-2">/> <span class="ml-5">Resolución de problemas</span></li>
-        </ul>
-    </div>
+   <!-- 
+        <div class="mx-5 my-10md:mx-10 xl:w-1/2 xl:mx-auto">
+            <h2 class="font-bold text-2xl md:text-4xl ml-10">
+                Habilidades sociales.
+            </h2>
+            <ul class="text-xl my-10 font-semibold md:text-3xl md:ml-20 ">
+                <li class="py-2">/> <span class="ml-5">Trabajo en equipo</span></li>
+                <li class="py-2">/> <span class="ml-5">Comunicación</span></li>
+                <li class="py-2">/> <span class="ml-5">Autoaprendizaje</span></li>
+                <li class="py-2">/> <span class="ml-5">Resolución de problemas</span></li>
+            </ul>
+        </div>  
+    -->
 </div>
 
 <style>
