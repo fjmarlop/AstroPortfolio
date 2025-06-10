@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+  link: string;
+}
+
+const texto = Astro.props.title;
+const nChars = texto.length;
+const link = Astro.props.link;
+---
+
+<div
+  class="group relative font-mono text-lg lg:text-2xl cursor-pointer p-3 mr-5"
+  style={`--n-chars: ${nChars}`}
+>
+  <span class="group-hover:opacity-0 transition-opacity duration-100">
+    <a href={link}>{texto}</a>
+  </span>
+
+  <span
+    class="reveal-layer absolute left-3 overflow-hidden whitespace-nowrap text-[#d1d4d4] pointer-events-none"
+  >
+    {texto}
+  </span>
+
+  <style>
+    @keyframes reveal {
+      from {
+        width: 0;
+      }
+      to {
+        width: calc(var(--n-chars) * 1ch);
+      }
+    }
+
+    .group:hover .reveal-layer {
+      animation: reveal 1s steps(var(--n-chars)) forwards;
+    }
+
+    .reveal-layer {
+      width: 0;
+    }
+  </style>
+</div>

@@ -1,0 +1,19 @@
+{
+  "title": "Nmap",
+  "slug": "nmap",
+  "categoria": "tools",
+  "uso": "Escaneo de redes y puertos",
+  "tags": ["escaneo", "reconocimiento", "tcp", "udp"],
+  "fecha": "2025-06-02",
+  "contenido": [
+    { "tipo": "h2", "texto": "🧠 Descripción" },
+    { "tipo": "p", "texto": "Nmap es una herramienta de escaneo de redes..." },
+
+    { "tipo": "h2", "texto": "🔧 Comandos útiles" },
+    {
+      "tipo": "code",
+      "lenguaje": "bash",
+      "contenido": "nmap -sV -p- -T4 10.10.10.10\nnmap -sC -sV -oA escaneo 10.10.10.10"
+    }
+  ]
+}

@@ -1,14 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import HomeComponent from '../components/HomeComponent.astro';
-import SkillComponent from '../components/SkillComponent.astro';
-import ProjetcsComponent from '../components/ProjetcsComponent.astro';
-import InfoComponent from '../components/InfoComponent.astro';
-import ContactoComponent from '../components/ContactoComponent.astro';
+import HomeComponent from '../components/dev/HomeComponent.astro';
+import ProjetcsComponent from '../components/dev/ProjetcsComponent.astro';
+import InfoComponent from '../components/dev/InfoComponent.astro';
+import ContactoComponent from '../components/dev/ContactoComponent.astro';
+
 
 ---
 
-<Layout title="Fjmarlop Desarollador de Apps">
+<Layout title="Dev | Pentester">
 	<main>
 		<section id="inicio">
 			<HomeComponent />
@@ -19,11 +19,6 @@ import ContactoComponent from '../components/ContactoComponent.astro';
 		<section id="proyectos">
 			<ProjetcsComponent />
 		</section>
-		
-		<section id="habilidades">
-			<SkillComponent />
-		</section>
-		 
 		<section id="contacto">
 			<ContactoComponent />
 		</section>

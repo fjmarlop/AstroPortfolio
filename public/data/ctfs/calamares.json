@@ -1,0 +1,16 @@
+{
+  "title": "Bocata de Calamares",
+  "slug": "calamares",
+  "categoria": "ctfs",
+  "plataforma": "The Hackers Labs",
+  "enlacePlataforma": "https://thehackerslabs.com/",
+  "dificultad": "Principiante",
+  "tags": [
+    "Principiante-Linux",
+    "Principiante-Web",
+    "Principiante-Seguridad ofensiva"
+  ],
+  "fecha": "05-06-2025",
+  "html": "/contenido/calamares.html"
+}
+

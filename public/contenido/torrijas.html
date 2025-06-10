@@ -1,0 +1,112 @@
+<div class="w-full md:w-2/3 mx-auto">
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    sudo netdiscover -r 192.168.72.0/24
+
+    Currently scanning: Finished!   |   Screen View: Unique Hosts                                                                                                                                                                            
+                                                                                                                                                                                                                                            
+    23 Captured ARP Req/Rep packets, from 4 hosts.   Total size: 1380                                                                                                                                                                        
+    _____________________________________________________________________________
+    IP            At MAC Address     Count     Len  MAC Vendor / Hostname      
+    -----------------------------------------------------------------------------
+    192.168.72.1    00:50:56:c0:00:08      1      60  VMware, Inc.                                                                                                                                                                           
+    192.168.72.2    00:50:56:ec:8b:c1     20    1200  VMware, Inc.                                                                                                                                                                           
+    192.168.72.132  00:0c:29:20:ae:39      1      60  VMware, Inc.                                                                                                                                                                           
+    192.168.72.254  00:50:56:e4:ea:5f      1      60  VMware, Inc.  
+    </pre>
+
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    sudo nmap -T4 -F -sC -sV -Pn -n  192.168.72.132
+    
+    Starting Nmap 7.95 ( https://nmap.org ) at 2025-06-08 18:27 EDT
+    Nmap scan report for 192.168.72.132
+    Host is up (0.00040s latency).
+    Not shown: 97 closed tcp ports (reset)
+    PORT     STATE SERVICE VERSION
+    22/tcp   open  ssh     OpenSSH 9.2p1 Debian 2+deb12u3 (protocol 2.0)
+    | ssh-hostkey: 
+    |   256 af:79:a1:39:80:45:fb:b7:cb:86:fd:8b:62:69:4a:64 (ECDSA)
+    |_  256 6d:d4:9d:ac:0b:f0:a1:88:66:b4:ff:f6:42:bb:f2:e5 (ED25519)
+    80/tcp   open  http    Apache httpd 2.4.62 ((Debian))
+    |_http-title: torrija.thl
+    |_http-server-header: Apache/2.4.62 (Debian)
+    3306/tcp open  mysql   MariaDB 5.5.5-10.11.6
+    | mysql-info: 
+    |   Protocol: 10
+    |   Version: 5.5.5-10.11.6-MariaDB-0+deb12u1
+    |   Thread ID: 7
+    |   Capabilities flags: 63486
+    |   Some Capabilities: DontAllowDatabaseTableColumn, Support41Auth, Speaks41ProtocolOld, SupportsTransactions, FoundRows, IgnoreSigpipes, S
+        upportsLoadDataLocal, InteractiveClient, Speaks41ProtocolNew, IgnoreSpaceBeforeParenthesis, ODBCClient, SupportsCompression, LongColumnFlag, 
+        ConnectWithDatabase, SupportsMultipleResults, SupportsMultipleStatments, SupportsAuthPlugins
+    |   Status: Autocommit
+    |   Salt: ^vY;Xc:8F:.ucBs@&
+    |_  Auth Plugin Name: mysql_native_password
+    MAC Address: 00:0C:29:20:AE:39 (VMware)
+    Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+    Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+    Nmap done: 1 IP address (1 host up) scanned in 6.81 seconds
+    </pre>
+     
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    sudo nmap -T4 --script=vuln -p 22,80,3306 192.168.72.132
+
+    Starting Nmap 7.95 ( https://nmap.org ) at 2025-06-08 18:40 EDT
+    Nmap scan report for 192.168.72.132
+    Host is up (0.00050s latency).
+
+    PORT     STATE SERVICE
+    22/tcp   open  ssh
+    80/tcp   open  http
+    | http-internal-ip-disclosure: 
+    |_  Internal IP Leaked: 127.0.0.1
+    | http-csrf: 
+    | Spidering limited to: maxdepth=3; maxpagecount=20; withinhost=192.168.72.132
+    |   Found the following possible CSRF vulnerabilities: 
+    |     
+    |     Path: http://192.168.72.132:80/
+    |     Form id: comment
+    |     Form action: 
+    |     
+    |     Path: http://192.168.72.132:80/index.html
+    |     Form id: comment
+    |     Form action: 
+    |     
+    |     Path: http://192.168.72.132:80/contact.html
+    |     Form id: comment
+    |_    Form action: 
+    | http-fileupload-exploiter: 
+    |   
+    |     Couldn't find a file-type field.
+    |   
+    |_    Couldn't find a file-type field.
+    |_http-dombased-xss: Couldn't find any DOM based XSS.
+    |_http-stored-xss: Couldn't find any stored XSS vulnerabilities.
+    | http-enum: 
+    |   /wordpress/: Blog
+    |   /wordpress/wp-login.php: Wordpress login page.
+    |   /css/: Potentially interesting directory w/ listing on 'apache/2.4.62 (debian)'
+    |   /images/: Potentially interesting directory w/ listing on 'apache/2.4.62 (debian)'
+    |_  /js/: Potentially interesting directory w/ listing on 'apache/2.4.62 (debian)'
+    3306/tcp open  mysql
+    MAC Address: 00:0C:29:20:AE:39 (VMware)
+
+    Nmap done: 1 IP address (1 host up) scanned in 37.01 seconds
+</pre>
+
+<pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    
+whatweb http://192.168.72.132
+
+http://192.168.72.132 [200 OK] Apache[2.4.62], Bootstrap, Country[RESERVED][ZZ], Email[demo@gmail.com], Frame, HTML5, HTTPServer[Debian Linux][Apache/2.4.62 (Debian)], IP[192.168.72.132], JQuery[3.0.0], Script[text/javascript], Title[torrija.thl], X-UA-Compatible[IE=edge]    
+</pre>
+
+</div>

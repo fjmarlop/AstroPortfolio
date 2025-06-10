@@ -1,0 +1,88 @@
+---
+import IndiceCategoria from "../components/ciber/IndiceCategoria.astro";
+import NavCiber from "../components/ciber/NavCiber.astro";
+import CiberLayout from "../layouts/ciberLayout.astro";
+
+import { getCategoriaIndex } from "../utils/getIndex.js";
+
+// Obtener los datos de cada categoría
+const cftPost = getCategoriaIndex("ctfs");
+const toolsPost = getCategoriaIndex("tools");
+const techPost = getCategoriaIndex("tecnicas");
+---
+
+<CiberLayout title="Hacking">
+    <script src="/js/toggle.js" is:inline></script>
+
+    <NavCiber />
+    <div>
+        <!-- Menú hamburguesa -->
+        <div
+            class="md:hidden p-4 border-b border-neutral-800 flex items-center justify-between"
+        >
+            <h1 class="text-white text-xl font-bold">Hacking</h1>
+            <button
+                onclick="document.getElementById('menuMovil').classList.toggle('hidden')"
+                class="text-white text-2xl"
+            >
+                ☰
+            </button>
+        </div>
+        <!-- Menú desplegable (solo móvil) -->
+        <div
+            id="menuMovil"
+            class="md:hidden hidden border-b border-neutral-800 px-4 py-2 bg-neutral-900"
+        >
+            <ul>
+                <IndiceCategoria
+                    titulo="CTFS"
+                    id="ctfListMob"
+                    items={cftPost}
+                />
+                <IndiceCategoria
+                    titulo="Herramientas"
+                    id="toolsListMob"
+                    items={toolsPost}
+                />
+                <IndiceCategoria
+                    titulo="Técnicas"
+                    id="techListMob"
+                    items={techPost}
+                />
+            </ul>
+        </div>
+
+        <!-- Contenido general -->
+        <div class="grid grid-cols-1 md:grid-cols-[250px_1fr] m-5">
+            <!-- Menú lateral escritorio -->
+            <aside
+                class="hidden md:block border-r border-neutral-800 p-4 overflow-y-auto h-screen sticky top-0"
+            >
+                <h2 class="text-xl font-bold mb-4 text-white">Hacking</h2>
+                <ul>
+                    <IndiceCategoria
+                        titulo="CTFS"
+                        id="ctfList"
+                        items={cftPost}
+                    />
+                    <IndiceCategoria
+                        titulo="Herramientas"
+                        id="toolsList"
+                        items={toolsPost}
+                    />
+                    <IndiceCategoria
+                        titulo="Técnicas"
+                        id="techList"
+                        items={techPost}
+                    />
+                </ul>
+            </aside>
+            <!-- Contenido principal -->
+            <section id="contenido">
+                <p class="prose prose-invert max-w-none text-neutral-200 text-center my-5">
+                    Selecciona un ítem del índice para ver su contenido.
+                </p>
+            </section>
+        </div>
+    </div>
+</CiberLayout>
