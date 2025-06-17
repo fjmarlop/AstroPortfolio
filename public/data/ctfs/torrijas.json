@@ -1,0 +1,15 @@
+{
+  "title": "Torrijas",
+  "slug": "torrijas",
+  "categoria": "ctfs",
+  "plataforma": "The Hackers Labs",
+  "enlacePlataforma": "https://thehackerslabs.com/",
+  "dificultad": "Principiante",
+  "tags": [
+    "Principiante-Linux",
+    "Principiante-Web",
+    "Principiante-Seguridad ofensiva"
+  ],
+  "fecha": "12-06-2025",
+  "html": "/contenido/torrijas.html"
+}

@@ -3,5 +3,10 @@
         "title": "bocata de calamares",
         "slug": "calamares",
         "categoria": "ctfs"
+    },
+    {
+        "title": "Torrijas",
+        "slug": "torrijas",
+        "categoria": "ctfs"
     }
 ]

@@ -1,0 +1,73 @@
+<div class="w-full md:w-2/3 mx-auto">
+    <p class="my-4  text-neutral-200 text-lg md:text-sm">(Network Mapper) es una herramienta de código abierto diseñada
+        para la exploración de redes y
+        auditoría de seguridad. Su popularidad se debe a su potencia, versatilidad y capacidad para proporcionar una
+        visión detallada del estado de una red, lo que la convierte en un recurso esencial tanto para administradores de
+        sistemas como para profesionales de la ciberseguridad.
+    </p>
+    <p class="my-4  text-neutral-200 text-lg md:text-sm">
+        Originalmente desarrollada por Gordon Lyon (Fyodor), Nmap permite descubrir dispositivos conectados a una red,
+        identificar puertos abiertos, determinar servicios activos y sus versiones, e incluso detectar sistemas
+        operativos. Todo esto lo hace utilizando técnicas avanzadas de escaneo que pueden ajustarse según el nivel de
+        profundidad y sigilo requerido.
+    </p>
+    <p class="my-4 text-neutral-200 text-lg md:text-sm">
+        Gracias a su constante desarrollo y comunidad activa, Nmap es hoy en día una herramienta imprescindible en
+        cualquier fase de un análisis de seguridad: desde el reconocimiento hasta la evaluación de vulnerabilidades.
+        Además, su interfaz gráfica (Zenmap) facilita su uso a usuarios menos familiarizados con la línea de comandos.
+    </p>
+    <h1 class="text-2xl my-4 text-center">Comandos más comunes de Nmap</h1>
+    <p class="my-4 text-lg md:text-sm">
+        1 - Escaneo rápido (ping scan)
+    </p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    nmap -sn 192.168.1.0/24
+    </pre>
+    <p class="my-4 text-neutral-200 text-lg md:text-sm">
+        Este comando realiza un escaneo de ping en la subred 192.168.1.0/24, identificando los dispositivos activos en
+        esa red.
+    </p>
+    <p class="my-4 text-lg md:text-sm">
+        2 - Detección de versión de servicios</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    nmap -sV 192.168.1.1
+    </pre>
+    <p class="my-4 text-neutral-200 text-lg md:text-sm">
+        Este comando escanea el host 192.168.1.1, identificando los servicios activos y sus versiones.
+    </p>
+    <p class="my-4 text-lg md:text-sm">
+        3 - Detección de vulnerabilidades</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    nmap --script=vuln 192.168.1.1
+    </pre>
+    <p class="my-4 text-neutral-200 text-lg md:text-sm">
+        Este comando utiliza scripts de Nmap para buscar vulnerabilidades conocidas en el host 192.168.1.1.
+    </p>
+    <p class="my-4 text-lg md:text-sm">
+        4 - Escaneo combinado</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    nmap -sS -sV -O -A 192.168.1.1
+    </pre>
+    <p class="my-4 text-neutral-200 text-lg md:text-sm">
+        Este comando realiza un escaneo completo del host 192.168.1.1, incluyendo detección de servicios, versiones y
+        sistema operativo.
+    </p>
+    <p class="my-4 text-lg md:text-sm">
+        5 - Escaneo HTTP con scripts NSE</p>
+    <pre
+        class="overflow-x-auto bg-neutral-900 bg-opacity-50 rounded-lg p-4 md:p-6 text-green-500 text-sm 
+        md:text-base leading-relaxed whitespace-pre-wrap scrollbar-thin scrollbar-thumb-lime-600 scrollbar-track-transparent">
+    nmap -p 80,443 --script=http-title,http-headers 192.168.1.1
+</pre>
+    <p class="my-4 text-neutral-200 text-lg md:text-sm">
+        Este comando escanea los puertos 80 y 443 del host 192.168.1.1, utilizando scripts para obtener el título de la
+        página y los encabezados HTTP. Puedes añadir más scripts NSE para análisis web.
+</div>
